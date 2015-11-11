@@ -1,0 +1,14 @@
+<package>
+  <description brief="t5_package">
+
+     t5_package
+
+  </description>
+  <author>João Barata Oliveira</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/t5_package</url>
+
+</package>
+
+

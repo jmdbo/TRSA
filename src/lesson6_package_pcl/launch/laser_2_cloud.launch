@@ -1,0 +1,7 @@
+<launch>
+  <node pkg="lesson6_package_pcl" type="lesson6_laser_2_cloud_node"
+      name="laser_2_cloud_node" output="screen" clear_params="true">
+    <remap from="/laser_scan" to="/scan" />
+    <remap from="/servo_tilt_angle" to="/tilt_servo_angle" />
+  </node>
+</launch>

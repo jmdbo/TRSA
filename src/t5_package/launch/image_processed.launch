@@ -1,0 +1,5 @@
+<launch>
+          <node name="camera_driver" pkg="t5_package" type="camera_driver"/>
+          <node name="image_convert" pkg="t5_package" type="image_convert"/>
+          <node name="image_view" pkg="t5_package" type="image_reader"/>
+</launch>

@@ -1,0 +1,20 @@
+image_width: 640
+image_height: 480
+camera_name: trsa_camera
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [378.770724935611, 0, 327.0039818945896, 0, 379.8722433661755, 243.2424816629267, 0, 0, 1]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [-0.2870946581284746, 0.06874193118227756, 0.0006070444845550122, 0.0002866574910396138, 0]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [282.0377502441406, 0, 331.4292758473639, 0, 0, 328.5387878417969, 244.3748411876622, 0, 0, 0, 1, 0]

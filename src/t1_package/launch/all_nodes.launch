@@ -1,0 +1,9 @@
+<launch>
+	<node name="my_first_node" pkg="t1_package" type="simple_node" output="screen" />
+	<node name="my_second_node" pkg="t1_package" type="simple_node_2" output="screen" />
+	<node name="turtle1" pkg="turtlesim" type="turtlesim_node" />
+	<!-- set parameters -->
+	<param name="background_r" value="250" />
+	<param name="background_g" value="125" />
+	<param name="background_b" value="100" />
+</launch>

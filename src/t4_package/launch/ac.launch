@@ -1,0 +1,4 @@
+<launch>
+          <node name="ac_controller_node" pkg="t4_package" type="ac_controller" output="screen" />
+          <node name="thermometer_node" pkg="t4_package" type="thermometer"/>
+</launch>

@@ -1,0 +1,12 @@
+background_b: 50
+background_g: 86
+background_r: 69
+rosdistro: 'indigo
+
+  '
+roslaunch:
+  uris: {host_jmdbo_thinkpad_edge_e540__40933: 'http://jmdbo-ThinkPad-Edge-E540:40933/'}
+rosversion: '1.11.13
+
+  '
+run_id: 87bb2008-6205-11e5-b190-ac7ba180b515

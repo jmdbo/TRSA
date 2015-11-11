@@ -1,0 +1,5 @@
+<launch>
+        <node name="game_engine_node" pkg="t2_package" type="game_engine" output="screen" />
+	<node name="ros_player_node" pkg="t2_package" type="ros_player"/>
+</launch>
+

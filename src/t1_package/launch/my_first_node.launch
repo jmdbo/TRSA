@@ -1,0 +1,3 @@
+<launch>
+	<node name="my_first_node" pkg="t1_package" type="simple_node" output="screen" />
+</launch>
