@@ -1,0 +1,21 @@
+<!--
+  Useful for debugging or just viewing the mobilerobot model/urdf/transform.
+ -->
+<launch>
+
+  <!-- send robot urdf to param server -->
+  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find tripod_description)/robots/tripod_class.urdf.xacro'" />
+  <param name="robot_description" command="$(arg urdf_file)" />
+
+
+  <!-- Use the robot state publisher to send the tf -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <param name="publish_frequency" type="double" value="20.0" />
+  </node>
+
+   <!-- is only valid if gazebo is not working-->
+<!--   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">-->
+<!--      <param name="/use_gui" value="false"/>-->
+<!--    </node>-->
+
+</launch>

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<root xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+      xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+      xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+      xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <property name="M_PI" value="3.1415926535897931" />
+  <property name="camera_length" value="0.013" />
+  <property name="camera_width" value="0.057" />
+  <property name="camera_height" value="0.029" />
+
+  <!-- This is commented below and its assumed that the lens is centered -->
+  <property name="lens_x" value="0.0" />
+  <property name="lens_y" value="0.0" />
+  <property name="lens_z" value="0.0" />
+  
+
+  <property name="M_PI" value="3.1415926535897931" />
+
+  <xacro:macro name="odroid_cam"  params="name parent cam_length cam_width cam_height *origin">
+
+   <joint name="${name}_joint" type="fixed">
+      <axis xyz="0 1 0" />
+      <insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${name}_link"/>
+    </joint>
+    <link name="${name}_link">
+      <inertial>
+        <mass value="0.001" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.0001" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 ${cam_height/2}" rpy="0 0 0" />
+        <geometry>
+          <box size="${cam_length} ${cam_width} ${cam_height}" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${cam_height/2}" rpy="0 0 0" />
+        <geometry>
+          <box size="${cam_length} ${cam_width} ${cam_height}" />
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- go from the base of the sensor to the actual sensor location -->
+    <joint name="${name}_lens_joint" type="fixed">
+      <origin xyz="${cam_length/2} 0.0 ${cam_height/2}" rpy="-${M_PI/2} 0 -${M_PI/2}"/>
+      <!-- origin xyz="${lens_x} ${lens_y} ${lens_z}" rpy="-${M_PI/2} 0 -${M_PI/2}"/-->
+      <parent link="${name}_link"/>
+      <child link="${name}_lens_link"/>
+    </joint>
+    <link name="${name}_lens_link" type="lens">
+      <inertial>
+        <mass value="0.001" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.0001" />
+      </inertial>
+    </link>
+    <!-- gazebo extensions -->
+  </xacro:macro>
+
+</root>

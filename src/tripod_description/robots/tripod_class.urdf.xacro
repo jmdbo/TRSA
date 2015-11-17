@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!--
+    - Base      : Tripod
+    - laser     : tilting hokuyo
+    - cameras 	: gopro/flir/usb
+-->    
+<robot name="tripod" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find tripod_description)/urdf/tripod_library_class.urdf.xacro" />
+  
+</robot>

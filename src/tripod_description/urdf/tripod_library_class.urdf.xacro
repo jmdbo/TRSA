@@ -1,0 +1,288 @@
+<?xml version="1.0" ?>
+<!--
+	This is the urdf description
+ -->
+<robot name="tripod" xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<!-- @TODO Insert all properties and calculations you need-->
+	<!-- HINT -> Don't forget to see all the parameters you need in each sensor etc-->
+	<!-- HINT -> One of the possible uses of the properties is to define distances -->
+	 <property name="example_property" value="0.0" />
+
+	 <property name="M_PI" value="3.1415926535897931" />
+	 <!-- Sensors Frame -->
+	 <property name="sensors_frame_thickness" value="0.04" />
+	 <property name="sensors_frame_length" value="0.33" />
+
+
+	 <!-- @TODO Include Sensors files (in sensors folder) that contain each sensor description (urdf/sensors)-->
+	 <!-- Example -->
+	 <xacro:include filename="$(find package_name)/urdf/sensors/sensor_name.urdf.xacro" />
+
+
+	<!-- Base Link and footprint -->
+	<!-- @TODO here the tripod_height property is used please define it in the appropriate section -->
+	
+	<link name="base_footprint"/>
+
+	<joint name="base_joint" type="fixed">
+		<origin xyz="0 0 ${tripod_height}" rpy="0 0 0" />
+		<parent link="base_footprint"/>
+		<child link="base_link" />
+	</joint>
+	
+	<link name="base_link">
+		<visual>
+			<geometry>
+				<box size="0.01 0.01 0.01" />
+			</geometry>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+		</visual>
+		<collision>
+			<geometry>
+				 <box size="0.01 0.01 0.01" />
+			</geometry>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+		</collision>
+		<inertial>
+			<origin xyz="0.0 0.0 0.0"/>
+			<mass value="0.01"/>
+			<inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
+		</inertial>
+	</link>
+
+	<!-- Sensors bar -->
+	<!-- HINT -> Here you can see an example in how to use properties that are defined above like sensors_frame_thickness-->
+
+
+	<joint name="sensors_joint" type="fixed">
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<parent link="base_link"/>
+		<child link="sensors_frame" />
+	</joint>
+
+	<link name="sensors_frame">
+		<visual>
+			<geometry>
+				<box size="${sensors_frame_thickness} ${sensors_frame_length} ${sensors_frame_thickness}" />
+			</geometry>
+			<origin xyz="0 -0.095 0" rpy="0 0 0"/>
+			<material name="light_grey">
+      			<color rgba="0.6 0.6 0.6 1"/>
+    		</material>
+		</visual>
+		<collision>
+			<geometry>
+				<box size="${sensors_frame_thickness} ${sensors_frame_length} ${sensors_frame_thickness}" />
+			</geometry>
+			<origin xyz="0 -0.095 0" rpy="0 0 0"/>
+		</collision>
+		<inertial>
+			<origin xyz="0.0 0.0 0.0"/>
+			<mass value="0.01"/>
+			<inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
+		</inertial>
+	</link>
+
+	<!-- Tripod Leg  -->
+	<!--@TODO (create a link that represents a "leg" of the tripod this should connect (joint) base_link -->
+	<!-- HINT there are some missing properties that you need to define above--> 
+	
+	<xacro:macro name="leg" params="id mirror yaw">
+		<link name="leg_${id}">
+			<visual>
+				<geometry>
+					<cylinder length="${tripod_height}" radius=".0100"/>
+				</geometry>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+			</visual>
+			<collision>
+				<geometry>
+					<cylinder length="${tripod_height}" radius=".0100"/>
+				</geometry>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+			</collision>
+			<inertial>
+				<mass value="1" />
+				<origin xyz="0 0 0" />
+				<inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
+			</inertial>
+		</link>
+
+		<joint name="${id}_leg_joint" type="fixed">
+			<parent link="base_link"/>
+			<child link="leg_${id}"/>
+			<origin xyz="0 0 ${-tripod_height/2}" rpy="0 0 0"/>
+			<axis xyz="0 0 1"/>
+		</joint>
+	</xacro:macro>
+
+		<!-- Here we call the macro itself -->
+		<xacro:leg id="2" mirror="-1" yaw="0"/>
+
+	<!-- The different Sensors Anchor Frames, here you should create a frame where you are going to place each sensor (table in the worksheet 7) -->
+	<!--@TODO Here try to understand how to use xacro and call it with the desired parameters-->
+
+	<xacro:macro name="sensors_frame" params="id offset">
+		<joint name="" type="">
+			<origin xyz="0 0{sensors_frame_thickness/2}" rpy="0 0 0" />
+			<parent link=""/>
+			<child link="" />
+		</joint>
+	
+		<link name=""> <!-- Define the link -->
+		</link>
+	</xacro:macro>
+
+
+	<!-- @TODO Here you should call the macros themselves -->
+
+
+	<!-- Dynamixel Servo (DO NOT CHANGE OTHER THAN THE TODO INSIDE)-->
+	<xacro:macro name="servo" params="id parent">
+
+		<!-- Servo Base -->
+
+		<link name="servo_link">
+			<visual>
+				<geometry>
+					<box size="0.05 0.065 0.05" />
+				</geometry>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+				<material name="black">
+      				<color rgba="0 0 0 1"/>
+    			</material>
+			</visual>
+			<collision>
+				<geometry>
+					<box size="0.05 0.065 0.05" />
+				</geometry>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+			</collision>
+			<inertial>
+				<mass value="1" />
+				<origin xyz="0 0 0" />
+				<inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
+			</inertial>
+		</link>
+
+		<joint name="servo_base_link_joint" type="fixed">
+			<origin xyz="0 0.025 -0.0125 " rpy="-${M_PI/2}  0 0" />
+			<parent link="${parent}"/>
+			<child link="servo_link" />
+		</joint>
+
+		<!-- Servo rotating support -->
+
+		<link name="servo_rotation_link">
+			<visual>
+				<geometry>
+					<cylinder length="0.005" radius=".01"/>
+				</geometry>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+			</visual>
+			<collision>
+				<geometry>
+					<cylinder length="0.005" radius=".001"/>
+				</geometry>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+			</collision>
+			<inertial>
+				<mass value="1" />
+				<origin xyz="0 0 0" />
+				<inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
+			</inertial>
+		</link>
+
+		<!-- @TODO Change the joint type to have a movable joint-->
+		<joint name="servo_rotation_joint" type="fixed">
+			<parent link="servo_link"/>
+			<child link="servo_rotation_link"/>
+			<!--limit effort="1000.0" lower="-${M_PI/2}" upper="${M_PI/2}" velocity="0.5"/-->
+			<origin xyz="0 -0.0195 0.025" rpy="0 0 0"/>
+			<axis xyz="0 0 1"/>
+		</joint>
+	</xacro:macro>
+
+	<!-- Here we call the macro itself (DO NOT CHANGE)-->
+	<xacro:servo id="0" parent="servo_sensor_frame"/>
+
+	<!-- Laser support (DO NOT CHANGE)-->
+	<xacro:macro name="laser_support" params="id parent">
+
+		<!-- Up Base -->
+
+		<link name="laser_support_link">
+			<visual>
+				<geometry>
+					<box size="0.035 0.037 0.002" />
+				</geometry>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+				<material name="light_grey">
+      				<color rgba="0 0 0 1"/>
+    			</material>
+			</visual>
+			<collision>
+				<geometry>
+					<box size="0.035 0.037 0.002" />
+				</geometry>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+			</collision>
+			<inertial>
+				<mass value="0.5" />
+				<origin xyz="0 0 0" />
+				<inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
+			</inertial>
+		</link>
+
+		<joint name="support_joint" type="fixed">
+			<origin xyz="0 0 -0.002 " rpy="0  0 ${M_PI}" />
+			<parent link="${parent}"/>
+			<child link="laser_support_link" />
+		</joint>
+
+		<!-- Laser -->
+
+		<link name="laser_support2_link">
+			<visual>
+				<geometry>
+					<!--box size="-0.037 0.07 0.002" /-->
+					<box size="-0.037 0.002 0.07" />
+				</geometry>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+				<material name="black"/>
+			</visual>
+			<collision>
+				<geometry>
+					<box size="-0.037 0.07 0.002" />
+				</geometry>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+			</collision>
+			<inertial>
+				<mass value="1" />
+				<origin xyz="0 0 0" />
+				<inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
+			</inertial>
+		</link>
+
+		<joint name="laser_support_joint2" type="fixed">
+			<parent link="laser_support_link"/>
+			<child link="laser_support2_link"/>
+			<origin xyz="0 -0.0175 0.035" rpy="0 0 0"/>
+		</joint>
+	</xacro:macro>
+
+	<!-- Here we call the macro itself (DO NOT CHANGE)-->
+	<xacro:laser_support id="0" parent="servo_rotation_link"/>
+
+
+	<!-- @TODO call the macros of the sensors you should have included by now -->
+	<!-- HINT -> the macros are placed inside the sensors folder, dont forget the parameters each xacro needs -->
+
+	<!-- Call Laser -->
+
+	<!-- Call Thermal Camera-->
+
+	<!-- Call GoPro-->
+
+</robot>
