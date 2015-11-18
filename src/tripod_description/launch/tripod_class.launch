@@ -14,8 +14,8 @@
   </node>
 
    <!-- is only valid if gazebo is not working-->
-<!--   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">-->
-<!--      <param name="/use_gui" value="false"/>-->
-<!--    </node>-->
+   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+     <param name="/use_gui" value="true"/>
+   </node>
 
 </launch>
