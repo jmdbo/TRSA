@@ -17,5 +17,6 @@
    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
      <param name="/use_gui" value="true"/>
    </node>
-
+   <!-- Start RVIZ to view the robot -->
+   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tripod_description)/rviz/tripod.rviz"/>
 </launch>

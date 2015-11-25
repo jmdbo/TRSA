@@ -4,7 +4,6 @@
  -->
 <robot name="tripod" xmlns:xacro="http://ros.org/wiki/xacro">
 
-	<!-- @TODO Insert all properties and calculations you need-->
 	<!-- HINT -> Don't forget to see all the parameters you need in each sensor etc-->
 	<!-- HINT -> One of the possible uses of the properties is to define distances -->
 
@@ -17,16 +16,13 @@
 	 <property name="sensors_frame_length" value="0.33" />
 
 
-	 <!-- @TODO Include Sensors files (in sensors folder) that contain each sensor description (urdf/sensors)-->
-	 <!-- Example -->
+	<!-- Example -->
 	 <xacro:include filename="$(find tripod_description)/urdf/sensors/flir_quark_640.urdf.xacro" />
 	 <xacro:include filename="$(find tripod_description)/urdf/sensors/gopro.urdf.xacro" />
 	 <xacro:include filename="$(find tripod_description)/urdf/sensors/hokuyo_04lx_laser.urdf.xacro" />
-	 <xacro:include filename="$(find tripod_description)/urdf/sensors/hokuyo_04lx_laser.gazebo.xacro" />
 	 <xacro:include filename="$(find tripod_description)/urdf/sensors/odroid_cam.urdf.xacro" />
 
 	<!-- Base Link and footprint -->
-	<!-- @TODO here the tripod_height property is used please define it in the appropriate section DONE -->
 
 	<link name="base_footprint"/>
 
@@ -71,7 +67,7 @@
 			<geometry>
 				<box size="${sensors_frame_thickness} ${sensors_frame_length} ${sensors_frame_thickness}" />
 			</geometry>
-			<origin xyz="0 -0.095 0" rpy="0 0 0"/>
+			<origin xyz="0 -0.045 0" rpy="0 0 0"/>
 			<material name="light_grey">
       			<color rgba="0.6 0.6 0.6 1"/>
     		</material>
@@ -80,7 +76,7 @@
 			<geometry>
 				<box size="${sensors_frame_thickness} ${sensors_frame_length} ${sensors_frame_thickness}" />
 			</geometry>
-			<origin xyz="0 -0.095 0" rpy="0 0 0"/>
+			<origin xyz="0 -0.045 0" rpy="0 0 0"/>
 		</collision>
 		<inertial>
 			<origin xyz="0.0 0.0 0.0"/>
@@ -90,7 +86,6 @@
 	</link>
 
 	<!-- Tripod Leg  -->
-	<!--@TODO (create a link that represents a "leg" of the tripod this should connect (joint) base_link DONE_I_THINK -->
 	<!-- HINT there are some missing properties that you need to define above-->
 
 	<xacro:macro name="leg" params="id mirror yaw">
@@ -126,45 +121,23 @@
 		<xacro:leg id="2" mirror="-1" yaw="0"/>
 
 	<!-- The different Sensors Anchor Frames, here you should create a frame where you are going to place each sensor (table in the worksheet 7) -->
-	<!--@TODO Here try to understand how to use xacro and call it with the desired parameters DONE-->
 
-	<xacro:macro name="flir_frame" params="id offset">
-		<joint name="flir_sensor_joint_${id}" type="fixed">
+	<xacro:macro name="sensors_frame" params="name id offset">
+		<joint name="${name}_joint_${id}" type="fixed">
 			<origin xyz="0 ${offset} ${sensors_frame_thickness/2}" rpy="0 0 0" />
 			<parent link="sensors_frame"/>
-			<child link="flir_sensor_frame_${id}" />
+			<child link="${name}_sensor_frame_${id}" />
 		</joint>
 
-		<link name="flir_sensor_frame_${id}">
-		</link>
-	</xacro:macro>
-
-	<xacro:macro name="gopro_frame" params="id offset">
-		<joint name="gopro_sensor_joint_${id}" type="fixed">
-			<origin xyz="0 ${offset} ${sensors_frame_thickness/2}" rpy="0 0 0" />
-			<parent link="sensors_frame"/>
-			<child link="gopro_sensor_frame_${id}" />
-		</joint>
-		<link name="gopro_sensor_frame_${id}">
-		</link>
-	</xacro:macro>
-
-	<xacro:macro name="servo_frame" params="id offset">
-		<joint name="servo_sensor_joint_${id}" type="fixed">
-			<origin xyz="0 ${offset} ${sensors_frame_thickness/2}" rpy="0 0 0" />
-			<parent link="sensors_frame"/>
-			<child link="servo_sensor_frame_${id}" />
-		</joint>
-
-		<link name="servo_sensor_frame_${id}">
+		<link name="${name}_sensor_frame_${id}">
 		</link>
 	</xacro:macro>
 
 
 	<!--        Call of the macros themselves        -->
-	<xacro:flir_frame id="1" offset="-0.173"/>
-	<xacro:gopro_frame id="1" offset="-0.053"/>
-	<xacro:servo_frame id="1" offset="0.095"/>
+	<xacro:sensors_frame name="flir" id="1" offset="-0.173"/>
+	<xacro:sensors_frame name="gopro" id="1" offset="-0.053"/>
+	<xacro:sensors_frame name="servo" id="1" offset="0.095"/>
 
 
 	<!-- Dynamixel Servo -->
@@ -223,7 +196,7 @@
 			</inertial>
 		</link>
 
-		<!-- @TODO Change the joint type to have a movable joint-->
+		<!-- Servo Revolution Joint -->
 		<joint name="servo_rotation_joint" type="revolute">
 			<parent link="servo_link"/>
 			<child link="servo_rotation_link"/>
@@ -304,8 +277,6 @@
 	<!-- Here we call the macro itself (DO NOT CHANGE)-->
 	<xacro:laser_support id="0" parent="servo_rotation_link"/>
 
-
-	<!-- @TODO call the macros of the sensors you should have included by now -->
 	<!-- HINT -> the macros are placed inside the sensors folder, dont forget the parameters each xacro needs -->
 
 	<!-- Call Laser -->
