@@ -1,0 +1,4 @@
+resolution: 0.01
+frame_id: base_link
+base_frame_id: base_link
+sensor_model/max_range: 4.0
