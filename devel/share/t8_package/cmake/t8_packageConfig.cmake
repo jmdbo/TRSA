@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(t8_package_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "/home/jmdbo/TRSA/src/t8_package/include " STREQUAL " ")
+if(NOT "/home/jmdbo/TRSA/devel/include;/home/jmdbo/TRSA/src/t8_package/include " STREQUAL " ")
   set(t8_package_INCLUDE_DIRS "")
-  set(_include_dirs "/home/jmdbo/TRSA/src/t8_package/include")
+  set(_include_dirs "/home/jmdbo/TRSA/devel/include;/home/jmdbo/TRSA/src/t8_package/include")
   foreach(idir ${_include_dirs})
     if(IS_ABSOLUTE ${idir} AND IS_DIRECTORY ${idir})
       set(include ${idir})
@@ -122,7 +122,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/jmdbo/TRSA/devel/lib;/home/jmdbo/TRSA/devel/lib;/home/jmdbo/trsa_ws/devel/lib;/opt/ros/indigo/lib)
+    foreach(path /home/jmdbo/TRSA/devel/lib;/home/jmdbo/TRSA/devel/lib;/opt/ros/indigo/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -145,7 +145,7 @@ foreach(library ${libraries})
   endif()
 endforeach()
 
-set(t8_package_EXPORTED_TARGETS "")
+set(t8_package_EXPORTED_TARGETS "t8_package_generate_messages_cpp;t8_package_generate_messages_lisp;t8_package_generate_messages_py")
 # create dummy targets for exported code generation targets to make life of users easier
 foreach(t ${t8_package_EXPORTED_TARGETS})
   if(NOT TARGET ${t})
@@ -182,7 +182,7 @@ foreach(depend ${depends})
   list(APPEND t8_package_EXPORTED_TARGETS ${${t8_package_dep}_EXPORTED_TARGETS})
 endforeach()
 
-set(pkg_cfg_extras "")
+set(pkg_cfg_extras "t8_package-msg-extras.cmake")
 foreach(extra ${pkg_cfg_extras})
   if(NOT IS_ABSOLUTE ${extra})
     set(extra ${t8_package_DIR}/${extra})

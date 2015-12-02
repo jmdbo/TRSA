@@ -48,11 +48,11 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+   FILES
+   thermal_msg.msg
+  cup_info.msg
+ )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -69,10 +69,11 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+generate_messages(
+   DEPENDENCIES
+   std_msgs
+   sensor_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -134,16 +135,24 @@ include_directories(
 ## Declare a C++ executable
 # add_executable(t8_package_node src/t8_package_node.cpp)
 add_executable(laser_2_cloud_node src/laser_2_cloud_node.cpp src/laser_2_cloud.cpp)
-
+add_executable(cup_segmentation_node src/cup_segmentation_node.cpp src/cup_segmentation.cpp)
+add_executable(image_reader_node src/image_reader_node.cpp src/imageReader.cpp)
+add_executable(aggregation_node src/aggregation_node.cpp src/aggregation.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 #add_dependencies(t8_package_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(laser_2_cloud_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(cup_segmentation_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(image_reader_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(aggregation_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(t8_package_node ${catkin_LIBRARIES} )
 target_link_libraries(laser_2_cloud_node ${catkin_LIBRARIES})
+target_link_libraries(cup_segmentation_node ${catkin_LIBRARIES})
+target_link_libraries(image_reader_node ${catkin_LIBRARIES})
+target_link_libraries(aggregation_node ${catkin_LIBRARIES})
 
 #############
 ## Install ##
