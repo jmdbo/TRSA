@@ -1,0 +1,4 @@
+bool[3] axis
+float32 angle
+---
+bool result
