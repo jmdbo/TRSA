@@ -3,18 +3,9 @@
 
 #include <ros/ros.h>
 #include <opencv2/opencv.hpp>
-#include <sensor_msgs/Image.h>
-#include <std_msgs/Int8.h>
-#include <std_msgs/Float64.h>
 #include <cv_bridge/cv_bridge.h>
-#include <sensor_msgs/image_encodings.h>
 #include <image_transport/image_transport.h>
-#include <geometry_msgs/Twist.h>
 #include <trabfinal/imagePosUAV.h>
-#include <sensor_msgs/Imu.h>
-
-
-
 
 
 class imageControl{
@@ -27,15 +18,17 @@ public:
 
 private:
 
+	/* Common Variables */
 	ros::NodeHandle nh;
-	cv_bridge::CvImagePtr cvImagePtr1;
+	cv_bridge::CvImagePtr cvImagePtr1; //Pointer to image
+	int xMaxImgCtrl, xMinImgCtrl, yMaxImgCtrl, yMinImgCtrl, xImgCtrl, yImgCtrl; //Stores the projection vectors indexes where the object is located
+	int xCenterUAVImgCtrl, yCenterUAVImgCtrl, xCenterHELIPADImgCtrl, yCenterHELIPADImgCtrl;  //Stores the values of the x and y values of the center of the Uav and of the Helipad
+
+	/* Message Publishers & Subscribers */
 	image_transport::Subscriber imageSubRaw;
 	ros::Publisher pub;
-	geometry_msgs::Twist gmt;
-	int controlImgCtrl, controlImgCtrl2, turnControl;
-	float focalLength;
-	float altitudeControl, angleControl;
-	int xMaxImgCtrl, xMinImgCtrl, yMaxImgCtrl, yMinImgCtrl, xImgCtrl, yImgCtrl, xCenterUAVImgCtrl, yCenterUAVImgCtrl, xCenterHELIPADImgCtrl, yCenterHELIPADImgCtrl;
+
+	/* Received Messages Callbacks */
 	void imageClbkRaw ( const sensor_msgs::ImageConstPtr& msg);
 };
 #endif

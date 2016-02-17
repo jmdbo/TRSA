@@ -1,11 +1,11 @@
 #include <ros/ros.h>
-#include "trabfinal/gpsControl.h"
+#include "trabfinal/GpsControl.h"
 
 int main(int argc, char** argv){
 
 	ros::init(argc, argv, "gpsController");
-	gpsControl gpController;
-	gpController.run();
+	GpsControl GpController;
+	GpController.run();
 	return EXIT_SUCCESS;
 
 };

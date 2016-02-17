@@ -1,0 +1,4 @@
+resolution: 0.01
+frame_id: base_footprint
+base_frame_id: base_footprint
+sensor_model/max_range: 4.0

@@ -1,19 +1,11 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(trabfinal)
+project(bms_package)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-laser_geometry
-cv_bridge
-image_transport
-roscpp
-pcl_ros
-std_msgs
-sensor_msgs
-rospy
-
+  roscpp
 )
 
 ## System dependencies are found with CMake's conventions
@@ -49,7 +41,12 @@ rospy
 ##   * uncomment the generate_messages entry below
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
-add_message_files( FILES gpsXY.msg imagePosUAV.msg)
+## Generate messages in the 'msg' folder
+# add_message_files(
+#   FILES
+#   Message1.msg
+#   Message2.msg
+# )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -66,7 +63,10 @@ add_message_files( FILES gpsXY.msg imagePosUAV.msg)
 # )
 
 ## Generate added messages and services with any dependencies listed here
-generate_messages(DEPENDENCIES std_msgs sensor_msgs )
+# generate_messages(
+#   DEPENDENCIES
+#   std_msgs  # Or other packages containing msgs
+# )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -98,10 +98,10 @@ generate_messages(DEPENDENCIES std_msgs sensor_msgs )
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-INCLUDE_DIRS include
-LIBRARIES trabfinal
-CATKIN_DEPENDS cv_bridge image_transport roscpp std_msgs laser_geometry rospy sensor_msgs pcl_ros
-DEPENDS system_lib
+#  INCLUDE_DIRS include
+#  LIBRARIES bms_package
+#  CATKIN_DEPENDS roscpp
+#  DEPENDS system_lib
 )
 
 ###########
@@ -110,45 +110,32 @@ DEPENDS system_lib
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(include)
+# include_directories(include)
 include_directories(
-${catkin_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
-# add_library(trabfinal
-#   src/${PROJECT_NAME}/trabfinal.cpp
+# add_library(bms_package
+#   src/${PROJECT_NAME}/bms_package.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(trabfinal ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(bms_package ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(trabfinal_node src/trabfinal_node.cpp)
-
-add_executable(UAVController src/UAVControllerNode.cpp src/UAVController.cpp)
-add_executable(gpsController src/GpsControlNode.cpp src/GpsControl.cpp)
-add_executable(imgController src/image_control_node.cpp src/imageControl.cpp)
-add_executable(tfBroadcaster src/tf_broadcaster_node.cpp src/TfBroadcaster.cpp)
+# add_executable(bms_package_node src/bms_package_node.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-#add_dependencies(trabfinal_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-add_dependencies(UAVController ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(gpsController ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(imgController ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(tfBroadcaster ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(bms_package_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(trabfinal_node ${catkin_LIBRARIES} )
-
-target_link_libraries(UAVController ${catkin_LIBRARIES})
-target_link_libraries(gpsController ${catkin_LIBRARIES})
-target_link_libraries(imgController ${catkin_LIBRARIES})
-target_link_libraries(tfBroadcaster ${catkin_LIBRARIES})
+# target_link_libraries(bms_package_node
+#   ${catkin_LIBRARIES}
+# )
 
 #############
 ## Install ##
@@ -165,7 +152,7 @@ target_link_libraries(tfBroadcaster ${catkin_LIBRARIES})
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS trabfinal trabfinal_node
+# install(TARGETS bms_package bms_package_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -190,7 +177,7 @@ target_link_libraries(tfBroadcaster ${catkin_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_trabfinal.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_bms_package.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

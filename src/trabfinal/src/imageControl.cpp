@@ -5,13 +5,7 @@ imageControl::imageControl()
 {
 	image_transport::ImageTransport it(nh);
 	imageSubRaw = it.subscribe("/kelp/helipad/camera/image", 1, &imageControl::imageClbkRaw, this);
-	//cameraFocalLength = nh.subscribe("/kelp/helipad/camera/focal_length", 1, &imageControl::focalLengthCallback, this);
 	pub = nh.advertise<trabfinal::imagePosUAV>("/autoland/imagePosUAV", 1);
-	//imgSubUavOrientation = nh.subscribe("/kelp/uav/imu", 1, &imageControl::imgCallbackUavOrientation, this);
-	controlImgCtrl2 = 0;
-	controlImgCtrl = 0;
-	turnControl = 0;
-
 }
 
 
@@ -20,7 +14,6 @@ imageControl::imageControl()
 void imageControl::imageClbkRaw ( const sensor_msgs::ImageConstPtr& msg)
 {
 
-	//if(altitudeControl <= focalLength){
 	try
 	{
 		// toCvCopy method copies the image data and returns a mutable CvImage
@@ -33,11 +26,8 @@ void imageControl::imageClbkRaw ( const sensor_msgs::ImageConstPtr& msg)
 
 	//RGB image to gray
 	cv::cvtColor(cvImagePtr1->image, cvImagePtr1->image, CV_BGR2GRAY);
-
-
 	//BINARY..
 	cv::threshold(cvImagePtr1->image, cvImagePtr1->image, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
-
 	// Declaring projection vector
 	int* projectionVectorXImgCtrl = new int[cvImagePtr1->image.cols]();
 	int* projectionVectorYImgCtrl = new int[cvImagePtr1->image.rows]();
@@ -88,9 +78,9 @@ void imageControl::imageClbkRaw ( const sensor_msgs::ImageConstPtr& msg)
 	xCenterHELIPADImgCtrl = (int)( cvImagePtr1->image.cols / 2);
 	yCenterHELIPADImgCtrl = (int)( cvImagePtr1->image.rows / 2);
 
-	ROS_INFO("xCenterUAV = %d, yCenterUAV = %d", xCenterUAVImgCtrl, yCenterUAVImgCtrl);
-	ROS_INFO("xCenterHELIPAD = %d, yCenterHELIPAD = %d", xCenterHELIPADImgCtrl, yCenterHELIPADImgCtrl);
-	ROS_INFO("xDiff = %d ---- yDiff = %d", xCenterUAVImgCtrl - xCenterHELIPADImgCtrl,yCenterUAVImgCtrl - yCenterHELIPADImgCtrl);
+
+	xCenterUAVImgCtrl = -1*(xCenterUAVImgCtrl - xCenterHELIPADImgCtrl);
+	yCenterUAVImgCtrl = -1*(yCenterUAVImgCtrl - yCenterHELIPADImgCtrl);
 
 	trabfinal::imagePosUAV imgPos;
 	imgPos.xCenterUAV = xCenterUAVImgCtrl;
@@ -100,71 +90,7 @@ void imageControl::imageClbkRaw ( const sensor_msgs::ImageConstPtr& msg)
 
 	pub.publish(imgPos);
 
-	/*
 
-	if(yCenterUAVImgCtrl < yCenterHELIPADImgCtrl - 4) {
-
-		gmt.linear.x = -0.4; //speed value m/s
-		turnControl = 1;
-		pub.publish(gmt);
-
-	}
-	else if(yCenterUAVImgCtrl > yCenterHELIPADImgCtrl + 4) {
-
-		gmt.linear.x = 0.4; //speed value m/s
-		pub.publish(gmt);
-	}
-	else if(yCenterUAVImgCtrl > (yCenterHELIPADImgCtrl - 4) && yCenterUAVImgCtrl < (yCenterHELIPADImgCtrl + 4)){
-
-		gmt.linear.x = 0; //speed value m/s
-		pub.publish(gmt);
-
-		if(xCenterUAVImgCtrl > xCenterHELIPADImgCtrl + 5){
-
-			if(angleControl >= 0.755000 && angleControl < 0.760000){
-				controlImgCtrl2 = 1;
-			}
-			else if(controlImgCtrl2 != 1 && controlImgCtrl != 1) {
-				gmt.angular.z = 0.25;
-				pub.publish(gmt);
-			}
-
-			else {
-				gmt.angular.z = 0;
-				gmt.linear.x = -0.2;
-				pub.publish(gmt);
-			}
-		}
-		else if(xCenterUAVImgCtrl < xCenterHELIPADImgCtrl - 5){
-
-			if(angleControl >= 0.755000 && angleControl < 0.760000){
-				controlImgCtrl = 1;
-			}
-			else if(controlImgCtrl != 1 && controlImgCtrl2 != 1) {
-				gmt.angular.z = 0.25;
-				pub.publish(gmt);
-			}
-
-			else{
-				gmt.angular.z = 0;
-				gmt.linear.x = 0.2;
-				pub.publish(gmt);
-			}
-		}
-		else {
-			gmt.linear.x = 0;
-			pub.publish(gmt);
-			if(turnControl != 0){
-
-				gmt.linear.z = -1; //speed value m/s
-				pub.publish(gmt);
-			}
-		}
-	}
-	*/
-
-	cv::circle(cvImagePtr1->image, cv::Point (xCenterUAVImgCtrl, yCenterUAVImgCtrl), 2, cv::Scalar(0,0,255), 3, 8, 0);
-	cv::circle(cvImagePtr1->image, cv::Point (xCenterHELIPADImgCtrl, yCenterHELIPADImgCtrl), 2, cv::Scalar(255,255,255), 3, 8, 0);
 	cv::imshow( "HELIPAD Cam", cvImagePtr1->image);
 	cv::waitKey(1);
 	delete [] projectionVectorXImgCtrl;

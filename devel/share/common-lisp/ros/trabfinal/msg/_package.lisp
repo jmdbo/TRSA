@@ -5,6 +5,8 @@
    "IMAGEPOSUAV"
    "<CONTROLUAV>"
    "CONTROLUAV"
+   "<GPSXY>"
+   "GPSXY"
    "<ALTITUDEUAV>"
    "ALTITUDEUAV"
   ))

@@ -1,0 +1,9 @@
+<launch>
+          <node name="image_tracker_node" pkg="trabfinal" type="imgController"/>
+          <node name="gps_tracker_node" pkg="trabfinal" type="gpsController"/>
+          <!--<node name="laser_tracker_node" pkg="trabfinal" type="laserController"/>-->
+          <node name="tf_baseframe_node" pkg="tf" type="static_transform_publisher" args="1.0 1.0 1.0 0.0 0.0 0.0 base_footprint hokuyo_joint_frame 100"/>
+          <node name="tf_laser_frame_node" pkg="trabfinal" type="tfBroadcaster"/>
+          <!--<node name="measures_reunion_node" pkg="trabfinal" type="measuresReunion_node"/>-->
+          <node name="UAV_control" pkg="trabfinal" type="UAVController"/>
+</launch>
