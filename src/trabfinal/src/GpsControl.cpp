@@ -42,6 +42,7 @@ void GpsControl::gpsCallbackUav( const sensor_msgs::NavSatFix& msgUAV)
 
 void GpsControl::convertLATLON2Meters(float latUAV, float lonUAV, float latHELIPAD, float lonHELIPAD, float *x, float *y)
 {
+	//Convert Latitude and Longitude to meters in order to be interpreted by the controller
 	float dLat = latitudeUAV - latitudeHELIPAD;
 	float dLon = longitudeUAV - longitudeHELIPAD;
 	float latitudeCircuference = 40075160 * cos(latitudeHELIPAD * 3.14 / 180);

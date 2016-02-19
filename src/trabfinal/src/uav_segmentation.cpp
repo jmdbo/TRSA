@@ -61,13 +61,6 @@ void UAV_Segmentation::cloudCallback (const sensor_msgs::PointCloud2::ConstPtr& 
 	extract.setNegative(true);
 	extract.filter(*seg_cloud);
 
-  //Create and define radial filter parameters
-  //pcl::RadiusOutlierRemoval<pcl::PointXYZ> radialFilter;
-  //radialFilter.setInputCloud(treated_cloud);
-  //radialFilter.setRadiusSearch(0.03);
-  //radialFilter.setMinNeighborsInRadius (20);
-  //radialFilter.filter (*treated_cloud);
-
   //Apply clustering algorithm
   pcl::search::KdTree<pcl::PointXYZ>::Ptr kdtree (new pcl::search::KdTree<pcl::PointXYZ>);
   kdtree->setInputCloud (seg_cloud);
@@ -127,48 +120,46 @@ void UAV_Segmentation::cloudCallback (const sensor_msgs::PointCloud2::ConstPtr& 
 
 
   //Geometry
-  geometry_msgs::PointStamped cupPoint1;
+  geometry_msgs::PointStamped UAVPoint1;
 
 
   tf::Quaternion q;
 
-  geometry_msgs::PointStamped cupSensorPoint1;
-
+  geometry_msgs::PointStamped UAVSensorPoint1;
 
   static tf::TransformBroadcaster tfBc1;
 
   tf::Transform tfCup1;
 
-  cupPoint1.header.frame_id = "base_footprint";
+  UAVPoint1.header.frame_id = "base_footprint";
+
+  UAVPoint1.header.stamp = cloud_in->header.stamp;
 
 
-  cupPoint1.header.stamp = cloud_in->header.stamp;
+  UAVPoint1.point.x = x1;
 
 
-  cupPoint1.point.x = x1;
+  UAVPoint1.point.y = y1;
 
 
-  cupPoint1.point.y = y1;
+  UAVPoint1.point.z = z1;
 
 
-  cupPoint1.point.z = z1;
-
-
-  ROS_INFO("Cup 1: X=%f Y=%f Z=%f", cupPoint1.point.x, cupPoint1.point.y, cupPoint1.point.z);
+  ROS_INFO("Cup 1: X=%f Y=%f Z=%f", UAVPoint1.point.x, UAVPoint1.point.y, UAVPoint1.point.z);
   trabfinal::gpsXY uavPos;
-  uavPos.x=cupPoint1.point.x;
-  uavPos.y=cupPoint1.point.y;
-  uavPos.z=cupPoint1.point.z;
+  uavPos.x=UAVPoint1.point.x;
+  uavPos.y=UAVPoint1.point.y;
+  uavPos.z=UAVPoint1.point.z;
 
   uav_control.publish(uavPos);
 
 
-  tf_listener.transformPoint("base_footprint", cupPoint1, cupSensorPoint1);
+  tf_listener.transformPoint("base_footprint", UAVPoint1, UAVSensorPoint1);
 
 
-  tfCup1.setOrigin( tf::Vector3(cupSensorPoint1.point.x, cupSensorPoint1.point.y, cupSensorPoint1.point.z) );
+  tfCup1.setOrigin( tf::Vector3(UAVSensorPoint1.point.x, UAVSensorPoint1.point.y, UAVSensorPoint1.point.z) );
 
-  ROS_INFO("Sensor Frame Cup 1: X=%f Y=%f Z=%f", cupSensorPoint1.point.x, cupSensorPoint1.point.y, cupSensorPoint1.point.z);
+  ROS_INFO("Sensor Frame UAV 1: X=%f Y=%f Z=%f", UAVSensorPoint1.point.x, UAVSensorPoint1.point.y, UAVSensorPoint1.point.z);
 
   q.setRPY(0, 0, 0);
 

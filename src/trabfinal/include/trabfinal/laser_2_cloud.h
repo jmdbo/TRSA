@@ -23,12 +23,10 @@ class  LaserScan_2_PointCloud //class
 
       ros::NodeHandle n_;
       laser_geometry::LaserProjection projector_;
-      ros::Subscriber scan_sub_, servo_sub_;
+      ros::Subscriber scan_sub_;
       ros::Publisher cloud_pub_;
       tf::TransformListener tfListener_;
-      Eigen::Matrix4f transform;
       void scanCallback (const sensor_msgs::LaserScan::ConstPtr& scan_in);
-      void servoCallback(const sensor_msgs::JointState& tilt_angle);
 };
 
 #endif

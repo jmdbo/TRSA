@@ -26,6 +26,7 @@ void laserControl::run()
         ROS_INFO("Min Angle: %f", m_minAngle);
         ROS_INFO("Current Angle: %f", m_currAngle);
         ROS_INFO("Increment: %d", m_increment);
+        //If the joint is between the min and max angles increment or decrement gradually
         if( m_currAngle < m_maxAngle && m_currAngle> m_minAngle ){
           srv.request.axis[0]=false;
           srv.request.axis[1]=true;
@@ -35,16 +36,20 @@ void laserControl::run()
           else
             srv.request.angle = -0.01;
         }else if (m_currAngle>=m_maxAngle){
+          //if max limit reached start decrementing
           m_increment = false;
           srv.request.axis[0]=false;
           srv.request.axis[1]=true;
           srv.request.axis[2]=false;
+          //resets laser to maxAngle - 0.01;
           srv.request.angle = m_maxAngle - m_currAngle - 0.01;
         } else if (m_currAngle<=m_minAngle){
+          //if min limit reached start incrementing
           m_increment = true;
           srv.request.axis[0]=false;
           srv.request.axis[1]=true;
           srv.request.axis[2]=false;
+          ///resets laser to minAngle + 0.01
           srv.request.angle = m_minAngle - m_currAngle +0.01;
         }
         if(!m_servoControl.call(srv)){
@@ -64,15 +69,18 @@ void laserControl::gpsClbk ( const sensor_msgs::NavSatFix& msg )
         m_minAngle = 0;
         m_maxAngle = 0;
       }else if(m_currHeight> 1){
+        //Calculations in the case that the UAV is above the laser
         centerAngle = atan2(1, m_currHeight-1);
         m_minAngle = centerAngle - 20 * (3.14/180);
         m_maxAngle = centerAngle + 20 * (3.14/180);
       } else if (m_currHeight==1){
+        //In the remote eventuality that the UAV is exactly at the level of the laser
         centerAngle = 3.14/2;
         m_minAngle = centerAngle - 20 * (3.14/180);
         m_maxAngle = centerAngle + 20 * (3.14/180);
       }
       else{
+        //Calculations in the case that the UAV is below the laser
         centerAngle = atan2(1-m_currHeight, 1);
         centerAngle+= 1.570796327;
         m_minAngle = centerAngle - 20 * (3.14/180);
@@ -81,7 +89,7 @@ void laserControl::gpsClbk ( const sensor_msgs::NavSatFix& msg )
 
   }
 }
-
+//Gets the current joint position
 void laserControl::jointClbk( const sensor_msgs::JointState& msg)
 {
   if(msg.header.seq> m_lastSeq){

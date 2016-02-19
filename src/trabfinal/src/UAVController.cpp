@@ -12,6 +12,8 @@ UAVController::UAVController()
 	LaserSub = nodeHandle.subscribe("/autoland/laserPosUAV", 1, &UAVController::laserClbk, this);
 }
 
+/*Checks if the uav its near enough to the helipad.
+  If it is, it can begin its descent. If not it's told to get nearer of the helipad center*/
 void  UAVController::controller(float x, float y, float z)
 {
 
@@ -36,7 +38,8 @@ float UAVController::fixAngle(float angle)
 	}
 	return angle;
 }
-
+/*rotation angle which its given to the uav
+  so its heading its the wanted one*/
 float UAVController::rotationControl(float desiredAngle, float realAngle)
 {
 	float t = desiredAngle - realAngle;
@@ -51,7 +54,7 @@ float UAVController::rotationControl(float desiredAngle, float realAngle)
 	}
 	return r;
 }
-
+/*Control the uav speed using its distance to the helipad*/
 float UAVController::distanceControl(float x, float y)
 {
 
@@ -65,6 +68,7 @@ float UAVController::distanceControl(float x, float y)
 	return dist;
 }
 
+/*Control the descent speed using the vertical distance between the uav and the helipad*/
 float UAVController::heightControl(float z)
 {
 
@@ -81,12 +85,14 @@ float UAVController::heightControl(float z)
 	return height;
 }
 
+/*Get the current heading of the uav*/
 float UAVController::getUAVHeading()
 {
 	float fi = atan2(2 * (imuX * imuY + imuW * imuZ), (imuW * imuW - imuZ * imuZ - imuY * imuY + imuX * imuX)) * 180 / 3.14159265359;
 	return fixAngle(fi);
 }
 
+/*Gets uav current coordenates and give the heading to get to helipad center*/
 float UAVController::getDesiredAngle(float x, float y)
 {
 	float desiredAngle = atan2(y, x) * 180 / 3.1415 - 270;
@@ -128,6 +134,7 @@ void UAVController::timerClbk( const ros::TimerEvent& event)
 	controller(x[sensorId], y[sensorId], uavZ);
 }
 
+/*Sends the uav to helipad center*/
 void UAVController::goHome(float x, float y)
 {
 
@@ -145,6 +152,7 @@ void UAVController::goHome(float x, float y)
 	UAVCtrlPub.publish(Gmt2);
 }
 
+/*Control the descent of the uav*/
 void UAVController::land(float z){
 
 	if(z >= 0.2){
@@ -159,6 +167,8 @@ void UAVController::land(float z){
 	UAVCtrlPub.publish(Gmt2);
 }
 
+/*Selects the sensor using the vertical distance between
+  the uav and the helipad*/
 int UAVController::selectSensor(float z)
 {
 	if(uavZ >= 8){
