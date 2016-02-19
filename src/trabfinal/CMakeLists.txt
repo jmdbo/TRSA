@@ -132,6 +132,9 @@ add_executable(UAVController src/UAVControllerNode.cpp src/UAVController.cpp)
 add_executable(gpsController src/GpsControlNode.cpp src/GpsControl.cpp)
 add_executable(imgController src/image_control_node.cpp src/imageControl.cpp)
 add_executable(tfBroadcaster src/tf_broadcaster_node.cpp src/TfBroadcaster.cpp)
+add_executable(laserControl src/laserControlNode.cpp src/laserControl.cpp)
+add_executable(laser_2_cloud src/laser_2_cloud_node.cpp src/laser_2_cloud.cpp)
+add_executable(uav_segmentation src/uav_segmentation_node.cpp src/uav_segmentation.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -141,7 +144,9 @@ add_dependencies(UAVController ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPO
 add_dependencies(gpsController ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(imgController ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(tfBroadcaster ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
+add_dependencies(laserControl ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(laser_2_cloud ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(uav_segmentation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(trabfinal_node ${catkin_LIBRARIES} )
 
@@ -149,6 +154,9 @@ target_link_libraries(UAVController ${catkin_LIBRARIES})
 target_link_libraries(gpsController ${catkin_LIBRARIES})
 target_link_libraries(imgController ${catkin_LIBRARIES})
 target_link_libraries(tfBroadcaster ${catkin_LIBRARIES})
+target_link_libraries(laserControl ${catkin_LIBRARIES})
+target_link_libraries(laser_2_cloud ${catkin_LIBRARIES})
+target_link_libraries(uav_segmentation ${catkin_LIBRARIES})
 
 #############
 ## Install ##

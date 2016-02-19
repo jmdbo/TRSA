@@ -2,8 +2,16 @@
           <node name="image_tracker_node" pkg="trabfinal" type="imgController"/>
           <node name="gps_tracker_node" pkg="trabfinal" type="gpsController"/>
           <!--<node name="laser_tracker_node" pkg="trabfinal" type="laserController"/>-->
-          <node name="tf_baseframe_node" pkg="tf" type="static_transform_publisher" args="1.0 1.0 1.0 0.0 0.0 0.0 base_footprint hokuyo_joint_frame 100"/>
+          <node name="tf_baseframe_node" pkg="tf" type="static_transform_publisher" args="-1.0 -1.0 1.0 0.0 -1.570796327 0.0 base_footprint hokuyo_joint_frame 100"/>
           <node name="tf_laser_frame_node" pkg="trabfinal" type="tfBroadcaster"/>
           <!--<node name="measures_reunion_node" pkg="trabfinal" type="measuresReunion_node"/>-->
           <node name="UAV_control" pkg="trabfinal" type="UAVController"/>
+          <node name="laser_control" pkg="trabfinal" type="laserControl" output="screen"/>
+          <node name="laser_2_cloud" pkg="trabfinal" type="laser_2_cloud"/>
+          <node name="uav_segmentation" pkg="trabfinal" type="uav_segmentation"/>
+          <node pkg="octomap_server" type="octomap_server_node" name="octomap_server" clear_params="true">
+            <rosparam command="load" file="$(find trabfinal)/params/octomap_mapping.yaml" />
+            <remap from="/cloud_in" to="/autoland/laser_cloud" />
+            <remap from="/octomap_point_cloud_centers" to="/autoland/octomap_cloud" />
+          </node>
 </launch>

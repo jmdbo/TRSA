@@ -4,6 +4,7 @@
 #include "ros/ros.h"
 #include "sensor_msgs/LaserScan.h"
 #include "sensor_msgs/PointCloud.h"
+#include "sensor_msgs/JointState.h"
 #include "laser_geometry/laser_geometry.h"
 #include "std_msgs/Float64.h"
 #include <pcl_conversions/pcl_conversions.h>
@@ -24,9 +25,10 @@ class  LaserScan_2_PointCloud //class
       laser_geometry::LaserProjection projector_;
       ros::Subscriber scan_sub_, servo_sub_;
       ros::Publisher cloud_pub_;
+      tf::TransformListener tfListener_;
       Eigen::Matrix4f transform;
       void scanCallback (const sensor_msgs::LaserScan::ConstPtr& scan_in);
-      void servoCallback(const std_msgs::Float64::ConstPtr& tilt_angle);
+      void servoCallback(const sensor_msgs::JointState& tilt_angle);
 };
 
 #endif

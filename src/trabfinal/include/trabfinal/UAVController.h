@@ -20,16 +20,16 @@ private:
 	/* Common Variables */
 	ros::NodeHandle nodeHandle;
 	geometry_msgs::Twist Gmt2;
-	int inicialHeightCtrl; //0 - First time entering, 1 - Not the first time entering
 	float imuX, imuY, imuZ, imuW; //Stores Uav orientation values
 	float x[3], y[3]; // 0 : Stores the position given by GPS, 1 :Stores the position given by the image, 2 :Stores the position given by laser
-	float uavZ, initialHeight; //Stores the height of the Uav and the first height to be seen
+	float uavZ;//Stores the height of the Uav
 
 	/* Message Publishers & Subscribers */
 	ros::Publisher UAVCtrlPub; //Publisher Control UAV
 	ros::Subscriber UAVPosSub; // Subscritor GPS
 	ros::Subscriber SubUavOrientation; //Subscritor IMU
 	ros::Subscriber UAVImgSub; //Subscritor Imagem
+	ros::Subscriber LaserSub; //Subscritor Laser
 
 	/* Timer that starts the controller */
 	ros::Timer controllerTimer;
@@ -39,6 +39,7 @@ private:
 	void imgCallback(const trabfinal::imagePosUAV& msgImg);
 	void positionCallback(const trabfinal::gpsXY& msgPosition);
 	void timerClbk( const ros::TimerEvent& event);
+	void laserClbk(const trabfinal::gpsXY& msgPosition);
 
 	/* Change angle range from -180 -> 180 to 0 -> 360 */
 	float fixAngle(float angle);

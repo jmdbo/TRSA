@@ -9,6 +9,7 @@ UAVController::UAVController()
 	UAVPosSub = nodeHandle.subscribe("/autoland/robotPosition", 1, &UAVController::positionCallback, this);
 	controllerTimer = nodeHandle.createTimer(ros::Duration(1/20), &UAVController::timerClbk, this, false, false);
 	UAVImgSub = nodeHandle.subscribe("/autoland/imagePosUAV", 1, &UAVController::imgCallback, this);
+	LaserSub = nodeHandle.subscribe("/autoland/laserPosUAV", 1, &UAVController::laserClbk, this);
 }
 
 void  UAVController::controller(float x, float y, float z)
@@ -100,19 +101,26 @@ void UAVController::CallbackUavOrientation(const sensor_msgs::Imu& msgUavOrienta
 	imuW = msgUavOrientation.orientation.w;
 }
 
+void UAVController::positionCallback(const trabfinal::gpsXY& msgPosition)
+{
+	x[0] = msgPosition.x;
+	y[0] = msgPosition.y;
+	uavZ = msgPosition.z;
+}
+
 void UAVController::imgCallback(const trabfinal::imagePosUAV& msgImg)
 {
 	x[1] = msgImg.xCenterUAV * 0.1;
 	y[1] = msgImg.yCenterUAV * 0.1;
 }
 
-void UAVController::positionCallback(const trabfinal::gpsXY& msgPosition)
+void UAVController::laserClbk(const trabfinal::gpsXY& msgPosition)
 {
-	x[0] = msgPosition.x;
-	y[0] = msgPosition.y;
-	uavZ = msgPosition.z;
-
+	x[2] = msgPosition.x * 0.1;
+	y[2] = msgPosition.y * 0.1;
 }
+
+
 
 void UAVController::timerClbk( const ros::TimerEvent& event)
 {
@@ -125,7 +133,6 @@ void UAVController::goHome(float x, float y)
 
 	float fi = getUAVHeading();
 	float desiredAngle = getDesiredAngle(x, y);
-
 	Gmt2.angular.z = rotationControl(desiredAngle, fi);
 
 	if(fi < desiredAngle - 10 || fi > desiredAngle + 10) {
@@ -136,29 +143,31 @@ void UAVController::goHome(float x, float y)
 	}
 
 	UAVCtrlPub.publish(Gmt2);
-
-
 }
+
 void UAVController::land(float z){
 
-	if(z >= 1){
-		Gmt2.linear.z = -1; //heightControl(z);
+	if(z >= 0.2){
+		Gmt2.linear.z = heightControl(z);
 	}
 	else {
+		Gmt2.linear.x = 0;
+		Gmt2.linear.y = 0;
 		Gmt2.linear.z = 0;
+		Gmt2.angular.z=0;
 	}
 	UAVCtrlPub.publish(Gmt2);
 }
 
 int UAVController::selectSensor(float z)
 {
-	if(uavZ >= 0){
+	if(uavZ >= 8){
 		return 0;
 	}
-	else if(uavZ < 0 && uavZ >= 0) {
+	else if(uavZ < 8 && uavZ >= 2) {
 		return 1;
 	}
-	else if(uavZ < 0){
+	else if(uavZ < 2){
 		return 2;
 	}
 }
